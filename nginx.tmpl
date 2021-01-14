@@ -7,7 +7,7 @@
 	{{ if .Address }}
 		{{ if .Socket }}
 			server unix:{{ .Socket }};
-		{{ else }}
+		{{ else }}
 			{{/* If we got the containers from swarm and this container's port is published to host, use host IP:PORT */}}
 			{{ if and .Container.Node.ID .Address.HostPort }}
 				# {{ .Container.Node.Name }}/{{ .Container.Name }}
@@ -194,7 +194,7 @@ upstream {{ $upstream_name }} {
 				{{ if ne $socket "/dev/null" }}
 					{{ $address := index $container.Addresses 0 }}
 					{{ template "upstream" (dict "Container" $container "Address" $address "Network" $containerNetwork "Socket" $socket) }}
-				{{ else }}
+				{{ else }}
 					{{ if eq $addrLen 1 }}
 						{{ $address := index $container.Addresses 0 }}
 						{{ template "upstream" (dict "Container" $container "Address" $address "Network" $containerNetwork) }}
@@ -204,7 +204,7 @@ upstream {{ $upstream_name }} {
 						{{ $address := where $container.Addresses "Port" $port | first }}
 						{{ template "upstream" (dict "Container" $container "Address" $address "Network" $containerNetwork) }}
 					{{ end }}
-				{{ end }}
+				{{ end }}
 			{{ else }}
 				# Cannot connect to network of this container
 				server 127.0.0.1 down;
